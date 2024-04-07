@@ -5,12 +5,61 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.io.PrintWriter;
+import java.io.FileWriter;
 import java.util.Scanner;
 
 public class StudentLogic {
 	
+	
 	private ArrayList<StudentModel> stlist = new ArrayList<StudentModel>();
  	private Scanner sc = new Scanner(System.in);
+
+	public void register()
+	{
+		System.out.println("Enter username: ");
+		String username = sc.next();
+
+		System.out.println("Enter password: ");
+		String password = sc.next();
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter("D:\\user_data.txt", true))) {
+            
+            writer.println(username + "," + password);
+            System.out.println("Registration successful");
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+		
+	}
+	public void login() {
+	    System.out.println("Enter username: ");
+	    String username = sc.next();
+
+	    System.out.println("Enter password: ");
+	    String password = sc.next();
+
+	    try (Scanner fileScanner = new Scanner(new FileInputStream("D:\\user_data.txt"))) {
+	        boolean found = false;
+	        while (fileScanner.hasNextLine()) {
+	            String line = fileScanner.nextLine();
+	            String[] data = line.split(",");
+	            if (data[0].equals(username) && data[1].equals(password)) {
+	                found = true;
+	                break;
+	            }
+	        }
+	        if (found) {
+	            System.out.println("Login successful");
+	        } else {
+	            System.out.println("Invalid username or password");
+	        }
+	    } catch (FileNotFoundException e) {
+	        System.out.println("Error: " + e.getMessage());
+	    }
+	  
+	}
+
  	
 	public void addStudent()
 	{
